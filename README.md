@@ -25,11 +25,13 @@ Watch / star this repo to be the first to know — and see [**Stay in the loop**
 
 ## What is this?
 
-**XIA Sandbox runs *actual* Linux programs — real Python, real shells, real SQLite — entirely inside a browser tab.**
+**XIA Sandbox runs *real* Linux programs — genuine CPython, bash, busybox, SQLite — entirely inside a browser tab, on the user's own device.**
 
-Not a reimplementation. Not a cloud VM you rent. The real binaries execute on the user's own device, in pure WebAssembly, with **nothing sent to a server**. Drop the SDK into any web app and give your users a full compute environment that boots in seconds.
+Open a page and you get a real **Ubuntu console**: type `python3`, run a `bash` script, query SQLite — and it executes locally in pure WebAssembly, with **nothing sent to a server**. There's no backend to send it to.
 
-It works by **ahead-of-time translating x86 machine code to WebAssembly** — so you get the fidelity of the real toolchain with the safety and reach of the web platform.
+It's not a reimplementation, and not a cloud VM you rent. The actual x86 binaries are **ahead-of-time translated to WebAssembly**, so you get the fidelity of the real toolchain with the reach and safety of the web platform — and results are **byte-for-byte identical to real x86**.
+
+Drop the SDK into any web app, or serve the demo on your LAN and open it on any phone or laptop: a full compute environment that boots in seconds, runs offline once cached, and keeps every byte on the device.
 
 ---
 
