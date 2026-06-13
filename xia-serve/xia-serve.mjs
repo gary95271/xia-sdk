@@ -45,7 +45,10 @@ const CFG = {
   dist: path.resolve(arg('--dist', E.XIA_DIST || path.join(HERE, '..', 'dist-demo'))),
   port: parseInt(arg('--port', E.XIA_PORT || '8088'), 10),
   host: arg('--host', E.XIA_HOST || '0.0.0.0'),
-  egress: flag('--egress', 'XIA_EGRESS'),
+  // Egress is ON by default — full networking out of the box. Disable with
+  // --no-egress or XIA_EGRESS=0. Private/loopback targets stay blocked unless
+  // --allow-private (so the sandbox reaches the internet, not the host's LAN).
+  egress: !process.argv.includes('--no-egress') && !/^(0|false|off|no)$/i.test(E.XIA_EGRESS || ''),
   allow: new Set((arg('--allow', E.XIA_ALLOW || '') || '').split(',').map((s) => s.trim()).filter(Boolean)),
   allowPrivate: flag('--allow-private', 'XIA_ALLOW_PRIVATE'),
   maxBytes: parseInt(arg('--max-bytes', E.XIA_MAX_BYTES || String(16 * 1024 * 1024)), 10),
@@ -269,7 +272,7 @@ function start() {
   server.on('error', (e) => { console.error(`! server error: ${e.message}` + (e.code === 'EADDRINUSE' ? ` (port ${CFG.port} in use — pass --port N)` : '')); process.exit(1); });
   server.listen(CFG.port, CFG.host, () => {
     const urls = lanUrls(CFG.port);
-    log(`XIA Sandbox serving ${path.basename(CFG.dist)}  ·  egress ${CFG.egress ? 'ON' : 'OFF (secure default)'}  ·  TLS-CA ${TLS_CA ? 'configured' : 'none'}`);
+    log(`XIA Sandbox serving ${path.basename(CFG.dist)}  ·  egress ${CFG.egress ? 'ON (--no-egress to disable)' : 'OFF'}  ·  TLS-CA ${TLS_CA ? 'configured' : 'none'}`);
     log(`  console:  http://localhost:${CFG.port}/   <- interactive Ubuntu terminal (just open it)`);
     for (const u of urls) log(`  network:  ${u}   <- open on any LAN device`);
     log(`  control:  http://localhost:${CFG.port}/__control`);

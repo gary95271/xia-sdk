@@ -104,9 +104,10 @@ worker.onmessage = async (e) => {
     bumpBoot('loading runtime…');
     let netProxy = null, tlsCa;
     try { const s = await (await fetch('/__api/status')).json(); if (s.egress) netProxy = '/__net'; } catch {}
-    try { if ((await fetch('/__tls-ca.json', { method: 'HEAD' })).ok) tlsCa = '__tls-ca.json'; } catch {}
     const mf = await (await fetch('./manifest.json')).json();
-    delete mf.tlsCa;
+    // TLS CA for guest HTTPS: prefer an operator-supplied CA (/__tls-ca.json);
+    // otherwise keep the dist's bundled CA so curl/wget https work out of the box.
+    try { if ((await fetch('/__tls-ca.json', { method: 'HEAD' })).ok) { delete mf.tlsCa; tlsCa = '__tls-ca.json'; } } catch {}
     netEl.textContent = netProxy ? 'network: on' : 'network: off';
     worker.postMessage({ type: 'init', assetBase: './', manifest: mf, netProxy, tlsCa, persist: true });
     bumpBoot('initializing sandbox…');
@@ -170,11 +171,25 @@ function runCore(core, argv) {
   pending.set(id, {});
   worker.postMessage({ type: 'run', id, core, argv, timeout: RUN_TIMEOUT });
 }
-// route: a plain python3/sqlite3 invocation (no shell operators) goes to its core;
-// everything else goes through bash.
+// true if the string has a TOP-LEVEL shell operator (| & ; < > ` or $( ) —
+// operators inside quotes (e.g. a Python `;` in -c '...') are NOT shell ops.
+function hasShellOps(s) {
+  let q = null;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (q) { if (c === '\\' && q !== "'") { i++; continue; } if (c === q) q = null; continue; }
+    if (c === '"' || c === "'") { q = c; continue; }
+    if (c === '\\') { i++; continue; }
+    if (c === '|' || c === '&' || c === ';' || c === '<' || c === '>' || c === '`') return true;
+    if (c === '$' && s[i + 1] === '(') return true;
+  }
+  return false;
+}
+// route: a plain python3/sqlite3 invocation (no TOP-LEVEL shell operators) goes
+// to its dedicated core; everything else goes through bash.
 function dispatch(raw) {
   const t = raw.trim();
-  if (!/[|&;<>`]|\$\(/.test(t)) {
+  if (!hasShellOps(t)) {
     const first = (t.split(/\s+/)[0] || '');
     if (/^python3?$/.test(first)) { const a = tokenize(t); a[0] = 'python3'; return runCore('python3', a); }
     if (first === 'sqlite3') return runCore('sqlite3', tokenize(t));

@@ -47,11 +47,12 @@ Change the port by stopping and relaunching with `--port N`.
 
 ## Network egress (the guest's internet)
 
-By default the sandbox has **no network** — it's sealed. Turn on **egress** (in
-the panel or `--egress`) and the guest's HTTP/HTTPS flows out **through this
-machine** via the `/__net` endpoint (the SDK's documented `netProxy` chokepoint).
+Egress is **ON by default** (full networking): the guest's HTTP/HTTPS flows out
+**through this machine** via the `/__net` endpoint (the SDK's documented
+`netProxy` chokepoint). Disable it with `--no-egress` / `XIA_EGRESS=0`, or toggle
+it live in the control panel.
 
-Secure by default when on:
+Guard-railed so the box reaches the internet, not your LAN:
 - private / loopback / link-local targets are **blocked** (SSRF guard) unless `--allow-private`;
 - optional host **allowlist** (`--allow a.com,b.com` or in the panel);
 - per-request **size + time caps** (`--max-bytes`, `--timeout`).
@@ -106,5 +107,5 @@ node --experimental-sea-config sea-config.json   # -> xia-serve.exe
 The control panel, egress proxy, and LAN serving are all in the one `.mjs`, so
 the `.exe` behaves identically to `node xia-serve.mjs`.
 
-See [`../docs/SDK-INTEGRATION-GUIDE.md`](../docs/SDK-INTEGRATION-GUIDE.md) for the
-full SDK API (the Worker protocol, `run` contract, init options, the netProxy wire format).
+See [`../SDK-INTEGRATION-GUIDE.md`](../SDK-INTEGRATION-GUIDE.md) for the full SDK
+API (the Worker protocol, `run` contract, init options, the netProxy wire format).
