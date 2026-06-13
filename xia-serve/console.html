@@ -10,9 +10,28 @@
   #bar { padding: 6px 12px; background: #11161f; border-bottom: 1px solid #222b38; color: #8b949e; font-size: 12px; display: flex; gap: 14px; align-items: center; }
   #bar b { color: #c9d1d9; } #bar .dot { width: 8px; height: 8px; border-radius: 50%; background: #d29922; display: inline-block; }
   #bar .dot.ok { background: #2ea043; } #bar .dot.err { background: #f85149; }
-  #term { flex: 1; overflow-y: auto; padding: 12px; white-space: pre-wrap; word-break: break-word; }
+  /* progress bar */
+  #pbar { height: 3px; background: #161c28; overflow: hidden; opacity: 0; transition: opacity .25s; }
+  #pbar.on { opacity: 1; }
+  #pfill { height: 100%; width: 0; background: linear-gradient(90deg, #2ea043, #58a6ff); transition: width .3s ease; }
+  #pbar.indet #pfill { width: 35%; transition: none; animation: sweep 1.1s ease-in-out infinite; }
+  @keyframes sweep { 0% { margin-left: -35%; } 100% { margin-left: 100%; } }
+  /* boot splash */
+  #boot { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; }
+  #boot.gone { display: none; }
+  #boot .logo { font-size: 18px; color: #c9d1d9; letter-spacing: .5px; }
+  #boot .logo b { color: #58a6ff; }
+  #boot .track { width: min(420px, 80vw); height: 8px; background: #161c28; border-radius: 6px; overflow: hidden; }
+  #boot .fill { height: 100%; width: 4%; background: linear-gradient(90deg, #2ea043, #58a6ff); border-radius: 6px; transition: width .3s ease; }
+  #boot .pct { color: #8b949e; font-size: 12px; min-width: 34px; }
+  #boot .msg { color: #8b949e; font-size: 12px; max-width: 80vw; text-align: center; min-height: 16px; }
+  #boot .sub { color: #57606a; font-size: 11px; }
+  /* terminal */
+  #term { flex: 1; overflow-y: auto; padding: 12px; white-space: pre-wrap; word-break: break-word; display: none; }
+  #term.on { display: block; }
   #term .cmd { color: #58a6ff; } #term .err { color: #f85149; } #term .sys { color: #8b949e; }
-  #form { display: flex; padding: 8px 12px; border-top: 1px solid #222b38; background: #0b0e14; }
+  #form { display: none; padding: 8px 12px; border-top: 1px solid #222b38; background: #0b0e14; }
+  #form.on { display: flex; }
   #ps1 { color: #2ea043; white-space: pre; }
   #in { flex: 1; background: transparent; border: 0; color: #c9d1d9; font: inherit; outline: none; margin-left: 8px; }
   a { color: #58a6ff; }
@@ -23,15 +42,48 @@
     <span id="status">booting…</span>
     <span style="margin-left:auto" id="net"></span>
     <a href="/__control" target="_blank">control</a></div>
+  <div id="pbar"><div id="pfill"></div></div>
+
+  <div id="boot">
+    <div class="logo"><b>XIA</b> Sandbox — booting Ubuntu</div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="track"><div class="fill" id="bootfill"></div></div>
+      <span class="pct" id="bootpct">0%</span>
+    </div>
+    <div class="msg" id="bootmsg">starting runtime…</div>
+    <div class="sub">runs entirely in your browser · nothing sent to a server</div>
+  </div>
+
   <div id="term"></div>
-  <form id="form" autocomplete="off"><span id="ps1">…</span><input id="in" autofocus spellcheck="false" disabled></form>
+  <form id="form" autocomplete="off"><span id="ps1">…</span><input id="in" autofocus spellcheck="false"></form>
 
 <script type="module">
 const term = document.getElementById('term'), input = document.getElementById('in');
 const ps1El = document.getElementById('ps1'), statusEl = document.getElementById('status');
 const dot = document.getElementById('dot'), netEl = document.getElementById('net');
+const boot = document.getElementById('boot'), bootfill = document.getElementById('bootfill');
+const bootpct = document.getElementById('bootpct'), bootmsg = document.getElementById('bootmsg');
+const pbar = document.getElementById('pbar'), pfill = document.getElementById('pfill');
 let cwd = '/root', ready = false, busy = false;
 const history = []; let hi = -1;
+
+// ---- progress: a determinate "creep" for boot, an indeterminate sweep for command runs ----
+let creep = null, prog = 4, target = 14;
+function bootSet(p) { prog = p; bootfill.style.width = p + '%'; bootpct.textContent = Math.round(p) + '%'; }
+function startBootProgress() {
+  bootSet(4);
+  creep = setInterval(() => { prog += (target - prog) * 0.06; if (prog > 97) prog = 97; bootSet(prog); }, 200);
+}
+function bumpBoot(msg) { target = Math.min(95, target + 13); if (msg) bootmsg.textContent = msg; }
+function finishBoot() {
+  if (creep) { clearInterval(creep); creep = null; }
+  bootSet(100);
+  setTimeout(() => { boot.classList.add('gone'); term.classList.add('on'); document.getElementById('form').classList.add('on'); input.focus(); }, 350);
+}
+function runBar(on) {
+  if (on) { pbar.classList.add('on', 'indet'); }
+  else { pbar.classList.remove('indet'); pfill.style.width = '100%'; pbar.classList.add('on'); setTimeout(() => { pbar.classList.remove('on'); pfill.style.width = '0'; }, 300); }
+}
 
 function out(text, cls) {
   const span = document.createElement('span');
@@ -44,27 +96,33 @@ function setPrompt() { ps1El.textContent = `root@xia-sandbox:${disp(cwd)}$ `; }
 
 const worker = new Worker(new URL('./fullruntime-worker.mjs', import.meta.url), { type: 'module' });
 const pending = new Map(); let nextId = 1;
+startBootProgress();
 
 worker.onmessage = async (e) => {
   const m = e.data;
   if (m.type === 'boot') {
-    out('Loading XIA Sandbox — translating Ubuntu userland to WebAssembly…\n', 'sys');
-    // externalize the CA: never use a baked secret — use the operator's, or none.
+    bumpBoot('loading runtime…');
     let netProxy = null, tlsCa;
     try { const s = await (await fetch('/__api/status')).json(); if (s.egress) netProxy = '/__net'; } catch {}
     try { if ((await fetch('/__tls-ca.json', { method: 'HEAD' })).ok) tlsCa = '__tls-ca.json'; } catch {}
     const mf = await (await fetch('./manifest.json')).json();
-    delete mf.tlsCa;                       // drop any baked CA reference
+    delete mf.tlsCa;
     netEl.textContent = netProxy ? 'network: on' : 'network: off';
     worker.postMessage({ type: 'init', assetBase: './', manifest: mf, netProxy, tlsCa, persist: true });
+    bumpBoot('initializing sandbox…');
     return;
   }
-  if (m.type === 'log') { statusEl.textContent = m.msg; return; }
+  if (m.type === 'log') {
+    statusEl.textContent = m.msg;
+    if (!ready) bumpBoot(m.msg); else bootmsg.textContent = m.msg;
+    return;
+  }
   if (m.type === 'ready') {
     ready = true; dot.className = 'dot ok'; statusEl.textContent = 'ready · Ubuntu 24.04 userland';
-    out('\nUbuntu 24.04 LTS  (XIA Sandbox — runs entirely in your browser, on your device)\n', 'sys');
+    finishBoot();
+    out('Ubuntu 24.04 LTS  (XIA Sandbox — runs entirely in your browser, on your device)\n', 'sys');
     out("Type a command and press Enter.  Try:  uname -a   ·   python3 --version   ·   ls -la /\n\n", 'sys');
-    input.disabled = false; setPrompt(); input.focus();
+    setPrompt();
     return;
   }
   if (m.type === 'result') {
@@ -75,8 +133,7 @@ worker.onmessage = async (e) => {
     if (so) out(so + (so.endsWith('\n') ? '' : '\n'));
     if (m.stderr) out(m.stderr + (m.stderr.endsWith('\n') ? '' : '\n'), 'err');
     if (m.exit !== 0) out(`[exit ${m.exit}${m.reason ? ' · ' + m.reason : ''}]\n`, 'sys');
-    busy = false; input.disabled = false; setPrompt(); input.focus();
-    if (p && p.done) p.done();
+    busy = false; runBar(false); input.disabled = false; statusEl.textContent = 'ready · Ubuntu 24.04 userland'; setPrompt(); input.focus();
     return;
   }
 };
@@ -84,9 +141,6 @@ worker.onmessage = async (e) => {
 function shq(s) { return "'" + String(s).replace(/'/g, "'\\''") + "'"; }
 function runCommand(cmd) {
   const id = nextId++;
-  // track cwd across one-shot processes (env/exports don't persist; files do, via overlay).
-  // Non-login shell + pinned PATH/HOME: avoids login-profile stderr noise while still
-  // resolving the busybox/coreutils applets in /bin.
   const wrapped = `export PATH=/usr/bin:/bin:/usr/sbin:/sbin; export HOME=/root; cd ${shq(cwd)} 2>/dev/null; { ${cmd}\n}; __rc=$?; printf '\\001CWD\\001%s\\001\\n' "$(pwd)"; exit $__rc`;
   pending.set(id, {});
   worker.postMessage({ type: 'run', id, core: 'bash', argv: ['bash', '-c', wrapped] });
@@ -101,7 +155,7 @@ document.getElementById('form').addEventListener('submit', (e) => {
   if (!cmd.trim()) { setPrompt(); return; }
   if (cmd.trim() === 'clear') { term.textContent = ''; setPrompt(); return; }
   history.push(cmd); hi = history.length;
-  busy = true; input.disabled = true; statusEl.textContent = 'running…';
+  busy = true; input.disabled = true; statusEl.textContent = 'running…'; runBar(true);
   runCommand(cmd);
 });
 input.addEventListener('keydown', (e) => {
