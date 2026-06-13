@@ -84,10 +84,12 @@ worker.onmessage = async (e) => {
 function shq(s) { return "'" + String(s).replace(/'/g, "'\\''") + "'"; }
 function runCommand(cmd) {
   const id = nextId++;
-  // track cwd across one-shot processes (env/exports don't persist; files do, via overlay)
-  const wrapped = `cd ${shq(cwd)} >/dev/null 2>&1; { ${cmd}\n}; __rc=$?; printf '\\001CWD\\001%s\\001\\n' "$(pwd)"; exit $__rc`;
+  // track cwd across one-shot processes (env/exports don't persist; files do, via overlay).
+  // Non-login shell + pinned PATH/HOME: avoids login-profile stderr noise while still
+  // resolving the busybox/coreutils applets in /bin.
+  const wrapped = `export PATH=/usr/bin:/bin:/usr/sbin:/sbin; export HOME=/root; cd ${shq(cwd)} 2>/dev/null; { ${cmd}\n}; __rc=$?; printf '\\001CWD\\001%s\\001\\n' "$(pwd)"; exit $__rc`;
   pending.set(id, {});
-  worker.postMessage({ type: 'run', id, core: 'bash', argv: ['bash', '-lc', wrapped] });
+  worker.postMessage({ type: 'run', id, core: 'bash', argv: ['bash', '-c', wrapped] });
 }
 
 document.getElementById('form').addEventListener('submit', (e) => {

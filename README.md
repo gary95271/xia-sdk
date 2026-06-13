@@ -87,6 +87,43 @@ No servers in that picture — and that's the point.
 
 ---
 
+## Quick start
+
+### Try the demo on your LAN
+
+Run the sandbox from **one** machine; open it on **any** device on the same network — phone, tablet, laptop. Each device runs the sandbox entirely in its own browser.
+
+```sh
+# 1. get the engine build (the dist/) — see Releases (coming soon)
+# 2. serve it on your LAN:
+node xia-serve/xia-serve.mjs --dist ./dist --port 8088
+# 3. open the printed network URL on any device, then visit  /console
+```
+
+`/console` is an **interactive Ubuntu terminal** — type `uname -a`, `ls -la /`, `python3 --version`, real `bash`. The host control panel at `/__control` turns on the sandbox's network access and stops the server. Full options, the `.env` config, and the bring-your-own TLS CA are in [`xia-serve/README.md`](./xia-serve/README.md).
+
+> No Node? The packaging flow ships a double-click `xia-serve.exe` (no install). The engine build is provided separately and is pre-launch.
+
+### Embed it in your web app
+
+One Web Worker + a tiny message protocol: **`init` → `run` → `result`**.
+
+```js
+const worker = new Worker(new URL('./fullruntime-worker.mjs', import.meta.url), { type: 'module' });
+worker.onmessage = (e) => {
+  if (e.data.type === 'boot')
+    fetch('./manifest.json').then(r => r.json())
+      .then(manifest => worker.postMessage({ type: 'init', assetBase: './', manifest }));
+};
+// run a real program on the user's device:
+worker.postMessage({ type: 'run', id: 1, core: 'python3', argv: ['python3', '-c', 'print(2**100)'] });
+// <- { type:'result', id:1, exit:0, stdout:'1267650600228229401496703205376\n', ... }
+```
+
+Full API (Worker protocol, `run` contract, init options, network egress, hosting): [`docs/SDK-INTEGRATION-GUIDE.md`](./docs/SDK-INTEGRATION-GUIDE.md).
+
+---
+
 ## Roadmap
 
 - [x] Core engine: real binaries running in the browser

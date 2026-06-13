@@ -87,6 +87,43 @@
 
 ---
 
+## 快速上手
+
+### 在局域网里跑 demo
+
+用**一台**机器把沙箱发到局域网，**任意**设备（手机 / 平板 / 笔记本）打开即用——每台设备都在自己浏览器里完整运行沙箱。
+
+```sh
+# 1. 拿到引擎构建（dist/）—— 见 Releases（即将提供）
+# 2. 在局域网上起服务：
+node xia-serve/xia-serve.mjs --dist ./dist --port 8088
+# 3. 在任意设备打开打印出来的 network 网址，然后访问  /console
+```
+
+`/console` 是**交互式 Ubuntu 终端**——直接敲 `uname -a`、`ls -la /`、`python3 --version`、真 `bash`。宿主控制面板在 `/__control`（开沙箱出网、停服务）。完整选项、`.env` 配置、自备 TLS CA 见 [`xia-serve/README.md`](./xia-serve/README.md)。
+
+> 没装 Node？打包流程会出一个双击即用的 `xia-serve.exe`（免安装）。引擎构建单独提供，目前为上线前阶段。
+
+### 集成进你的 Web 应用
+
+一个 Web Worker + 极简消息协议：**`init` → `run` → `result`**。
+
+```js
+const worker = new Worker(new URL('./fullruntime-worker.mjs', import.meta.url), { type: 'module' });
+worker.onmessage = (e) => {
+  if (e.data.type === 'boot')
+    fetch('./manifest.json').then(r => r.json())
+      .then(manifest => worker.postMessage({ type: 'init', assetBase: './', manifest }));
+};
+// 在用户设备上跑真实程序：
+worker.postMessage({ type: 'run', id: 1, core: 'python3', argv: ['python3', '-c', 'print(2**100)'] });
+// <- { type:'result', id:1, exit:0, stdout:'1267650600228229401496703205376\n', ... }
+```
+
+完整接口（Worker 协议、`run` 契约、init 选项、网络出口、托管要求）见 [`docs/SDK-INTEGRATION-GUIDE.md`](./docs/SDK-INTEGRATION-GUIDE.md)。
+
+---
+
 ## 路线图
 
 - [x] 核心引擎：真实二进制在浏览器里运行
