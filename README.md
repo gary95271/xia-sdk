@@ -1,5 +1,7 @@
 <div align="center">
 
+**English** · [中文](./README.zh-CN.md)
+
 # XIA Sandbox
 
 ### Run real Linux programs in the browser. No server. No install. Just a tab.
@@ -16,6 +18,8 @@
 
 We're putting the finishing touches on a public, drop-in SDK. **Launch date: coming soon.**
 Watch / star this repo to be the first to know — and see [**Stay in the loop**](#-stay-in-the-loop) below.
+
+> 👀 **Preview the SDK integration surface →** [`docs/SDK-OVERVIEW.md`](./docs/SDK-OVERVIEW.md) · current version: see [`CHANGELOG`](./CHANGELOG.md) (`0.1.0-preview`)
 
 ---
 
