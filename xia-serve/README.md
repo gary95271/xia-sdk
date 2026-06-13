@@ -107,5 +107,5 @@ node --experimental-sea-config sea-config.json   # -> xia-serve.exe
 The control panel, egress proxy, and LAN serving are all in the one `.mjs`, so
 the `.exe` behaves identically to `node xia-serve.mjs`.
 
-See [`../SDK-INTEGRATION-GUIDE.md`](../SDK-INTEGRATION-GUIDE.md) for the full SDK
-API (the Worker protocol, `run` contract, init options, the netProxy wire format).
+See [`../docs/SDK-INTEGRATION-GUIDE.md`](../docs/SDK-INTEGRATION-GUIDE.md) for the
+full SDK API (the Worker protocol, `run` contract, init options, the netProxy wire format).
