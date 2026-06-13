@@ -102,7 +102,7 @@ node xia-serve/xia-serve.mjs --dist ./dist --port 8088
 # 3. open the printed network URL on any device — the Ubuntu console loads right there
 ```
 
-The page that opens is an **interactive Ubuntu terminal** — type `uname -a`, `ls -la /`, `python3 --version`, real `bash`. The host control panel at `/__control` turns on the sandbox's network access and stops the server. Full options, the `.env` config, and the bring-your-own TLS CA are in [`xia-serve/README.md`](./xia-serve/README.md).
+The page that opens is an **interactive Ubuntu terminal** — type `uname -a`, `ls /`, `python3 --version`, `python3 -c 'print(2**100)'`, real `bash`. The host control panel at `/__control` turns on the sandbox's network access and stops the server. Full options, the `.env` config, and the bring-your-own TLS CA are in [`xia-serve/README.md`](./xia-serve/README.md).
 
 > No Node? The packaging flow ships a double-click `xia-serve.exe` (no install). The engine build is provided separately and is pre-launch.
 

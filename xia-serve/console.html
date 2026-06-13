@@ -121,7 +121,7 @@ worker.onmessage = async (e) => {
     ready = true; dot.className = 'dot ok'; statusEl.textContent = 'ready · Ubuntu 24.04 userland';
     finishBoot();
     out('Ubuntu 24.04 LTS  (XIA Sandbox — runs entirely in your browser, on your device)\n', 'sys');
-    out("Type a command and press Enter.  Try:  uname -a   ·   python3 --version   ·   ls -la /\n\n", 'sys');
+    out("Type a command and press Enter.  Try:  uname -a   ·   python3 --version   ·   ls /   ·   python3 -c 'print(2**100)'\n\n", 'sys');
     setPrompt();
     return;
   }
@@ -139,11 +139,47 @@ worker.onmessage = async (e) => {
 };
 
 function shq(s) { return "'" + String(s).replace(/'/g, "'\\''") + "'"; }
-function runCommand(cmd) {
+const RUN_TIMEOUT = 60000;
+
+// Minimal shell-ish tokenizer (handles ' " and backslash) for routing a direct
+// python3/sqlite3 invocation to its own core.
+function tokenize(s) {
+  const out = []; let cur = '', q = null, esc = false, started = false;
+  for (const c of s) {
+    if (esc) { cur += c; esc = false; started = true; continue; }
+    if (c === '\\' && q !== "'") { esc = true; continue; }
+    if (q) { if (c === q) q = null; else cur += c; started = true; continue; }
+    if (c === '"' || c === "'") { q = c; started = true; continue; }
+    if (/\s/.test(c)) { if (started) { out.push(cur); cur = ''; started = false; } continue; }
+    cur += c; started = true;
+  }
+  if (started) out.push(cur);
+  return out;
+}
+
+// bash core: shell features (pipes, &&, builtins) + busybox applets, with cwd tracking.
+function runBash(cmd) {
   const id = nextId++;
-  const wrapped = `export PATH=/usr/bin:/bin:/usr/sbin:/sbin; export HOME=/root; cd ${shq(cwd)} 2>/dev/null; { ${cmd}\n}; __rc=$?; printf '\\001CWD\\001%s\\001\\n' "$(pwd)"; exit $__rc`;
+  const wrapped = `export PATH=/usr/bin:/bin:/usr/sbin:/sbin; export HOME=/root; mkdir -p "$HOME" 2>/dev/null; cd ${shq(cwd)} 2>/dev/null || cd "$HOME" 2>/dev/null || cd /; { ${cmd}\n}; __rc=$?; printf '\\001CWD\\001%s\\001\\n' "$(pwd)"; exit $__rc`;
   pending.set(id, {});
-  worker.postMessage({ type: 'run', id, core: 'bash', argv: ['bash', '-c', wrapped] });
+  worker.postMessage({ type: 'run', id, core: 'bash', argv: ['bash', '-c', wrapped], timeout: RUN_TIMEOUT });
+}
+// dedicated core (python3 / sqlite3) — runs as its own program, no bash wrapper.
+function runCore(core, argv) {
+  const id = nextId++;
+  pending.set(id, {});
+  worker.postMessage({ type: 'run', id, core, argv, timeout: RUN_TIMEOUT });
+}
+// route: a plain python3/sqlite3 invocation (no shell operators) goes to its core;
+// everything else goes through bash.
+function dispatch(raw) {
+  const t = raw.trim();
+  if (!/[|&;<>`]|\$\(/.test(t)) {
+    const first = (t.split(/\s+/)[0] || '');
+    if (/^python3?$/.test(first)) { const a = tokenize(t); a[0] = 'python3'; return runCore('python3', a); }
+    if (first === 'sqlite3') return runCore('sqlite3', tokenize(t));
+  }
+  return runBash(t);
 }
 
 document.getElementById('form').addEventListener('submit', (e) => {
@@ -156,7 +192,7 @@ document.getElementById('form').addEventListener('submit', (e) => {
   if (cmd.trim() === 'clear') { term.textContent = ''; setPrompt(); return; }
   history.push(cmd); hi = history.length;
   busy = true; input.disabled = true; statusEl.textContent = 'running…'; runBar(true);
-  runCommand(cmd);
+  dispatch(cmd);
 });
 input.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowUp') { if (hi > 0) { hi--; input.value = history[hi]; e.preventDefault(); } }

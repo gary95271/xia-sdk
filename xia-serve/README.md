@@ -27,7 +27,7 @@ loads and drops into the Ubuntu environment.
 
 Opening the server URL (`http://<host>:<port>/`) drops you straight into a full
 **Ubuntu terminal** — type commands and press Enter (`uname -a`, `python3 --version`,
-`ls -la /`, real bash). (`/console` is an explicit alias for the same page.)
+`ls /`, `python3 -c 'print(2**100)'`, real bash). (`/console` is an explicit alias for the same page.)
 It runs 100% in the visitor's browser; the working directory persists across
 commands and files persist across reloads. This is the page to hand to users.
 
