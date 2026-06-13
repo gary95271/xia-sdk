@@ -99,10 +99,10 @@
 # 1. 拿到引擎构建（dist/）—— 见 Releases（即将提供）
 # 2. 在局域网上起服务：
 node xia-serve/xia-serve.mjs --dist ./dist --port 8088
-# 3. 在任意设备打开打印出来的 network 网址，然后访问  /console
+# 3. 在任意设备打开打印出来的 network 网址 —— Ubuntu 控制台直接就在那
 ```
 
-`/console` 是**交互式 Ubuntu 终端**——直接敲 `uname -a`、`ls -la /`、`python3 --version`、真 `bash`。宿主控制面板在 `/__control`（开沙箱出网、停服务）。完整选项、`.env` 配置、自备 TLS CA 见 [`xia-serve/README.md`](./xia-serve/README.md)。
+打开的页面就是**交互式 Ubuntu 终端**——直接敲 `uname -a`、`ls -la /`、`python3 --version`、真 `bash`。宿主控制面板在 `/__control`（开沙箱出网、停服务）。完整选项、`.env` 配置、自备 TLS CA 见 [`xia-serve/README.md`](./xia-serve/README.md)。
 
 > 没装 Node？打包流程会出一个双击即用的 `xia-serve.exe`（免安装）。引擎构建单独提供，目前为上线前阶段。
 

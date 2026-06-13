@@ -99,10 +99,10 @@ Run the sandbox from **one** machine; open it on **any** device on the same netw
 # 1. get the engine build (the dist/) — see Releases (coming soon)
 # 2. serve it on your LAN:
 node xia-serve/xia-serve.mjs --dist ./dist --port 8088
-# 3. open the printed network URL on any device, then visit  /console
+# 3. open the printed network URL on any device — the Ubuntu console loads right there
 ```
 
-`/console` is an **interactive Ubuntu terminal** — type `uname -a`, `ls -la /`, `python3 --version`, real `bash`. The host control panel at `/__control` turns on the sandbox's network access and stops the server. Full options, the `.env` config, and the bring-your-own TLS CA are in [`xia-serve/README.md`](./xia-serve/README.md).
+The page that opens is an **interactive Ubuntu terminal** — type `uname -a`, `ls -la /`, `python3 --version`, real `bash`. The host control panel at `/__control` turns on the sandbox's network access and stops the server. Full options, the `.env` config, and the bring-your-own TLS CA are in [`xia-serve/README.md`](./xia-serve/README.md).
 
 > No Node? The packaging flow ships a double-click `xia-serve.exe` (no install). The engine build is provided separately and is pre-launch.
 

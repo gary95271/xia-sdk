@@ -25,8 +25,9 @@ loads and drops into the Ubuntu environment.
 
 ## Interactive console
 
-`http://<host>:<port>/console` is a full **Ubuntu terminal** — type commands and
-press Enter (`uname -a`, `python3 --version`, `ls -la /`, `pip`-free, real bash).
+Opening the server URL (`http://<host>:<port>/`) drops you straight into a full
+**Ubuntu terminal** — type commands and press Enter (`uname -a`, `python3 --version`,
+`ls -la /`, real bash). (`/console` is an explicit alias for the same page.)
 It runs 100% in the visitor's browser; the working directory persists across
 commands and files persist across reloads. This is the page to hand to users.
 

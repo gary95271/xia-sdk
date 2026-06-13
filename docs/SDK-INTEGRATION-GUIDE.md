@@ -29,7 +29,7 @@ produce. Nothing leaves the device unless you explicitly wire network egress.
 ```sh
 node xia-serve/xia-serve.mjs --dist /path/to/dist --port 8088
 # open the printed network URL on any device:
-#   /console     interactive Ubuntu terminal (hand this to users)
+#   /            interactive Ubuntu terminal — opens directly (hand this to users)
 #   /__control   host control panel (egress on/off, stop)
 ```
 See [`xia-serve/README.md`](../xia-serve/README.md). This is also how you give the

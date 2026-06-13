@@ -260,7 +260,9 @@ function start() {
     if (urlPath.startsWith('/__api/')) return void handleApi(req, res, urlPath);
     if (urlPath === '/__tls-ca.json') return void serveTlsCa(res);
     if (urlPath === '/__control' || urlPath === '/__control/') return void servePanel(res, 'control.html');
-    if (urlPath === '/console' || urlPath === '/console.html' || urlPath === '/__console') return void servePanel(res, 'console.html');
+    // The interactive Ubuntu console is the default landing page (open the URL =
+    // get a typeable console). The old button demo stays at /demo.html.
+    if (urlPath === '/' || urlPath === '' || urlPath === '/console' || urlPath === '/console.html' || urlPath === '/__console') return void servePanel(res, 'console.html');
     if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); return res.end('method'); }
     serveStatic(req, res, urlPath);
   });
@@ -268,8 +270,8 @@ function start() {
   server.listen(CFG.port, CFG.host, () => {
     const urls = lanUrls(CFG.port);
     log(`XIA Sandbox serving ${path.basename(CFG.dist)}  ·  egress ${CFG.egress ? 'ON' : 'OFF (secure default)'}  ·  TLS-CA ${TLS_CA ? 'configured' : 'none'}`);
-    log(`  console:  http://localhost:${CFG.port}/console   <- interactive Ubuntu terminal`);
-    for (const u of urls) log(`  network:  ${u}console   <- open on any LAN device`);
+    log(`  console:  http://localhost:${CFG.port}/   <- interactive Ubuntu terminal (just open it)`);
+    for (const u of urls) log(`  network:  ${u}   <- open on any LAN device`);
     log(`  control:  http://localhost:${CFG.port}/__control`);
     if (CFG.open) openBrowser(`http://localhost:${CFG.port}/__control`);
   });
