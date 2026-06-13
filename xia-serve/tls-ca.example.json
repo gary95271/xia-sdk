@@ -1,0 +1,6 @@
+{
+  "_README": "Template only — contains NO key. Copy to your own file (e.g. tls-ca.json, kept out of version control), generate a throwaway sandbox-local CA, paste the two PEMs in, and point XIA_TLS_CA at it. This CA only terminates the guest's HTTPS INSIDE the user's own browser tab; it is not a server credential. Generate one per deployment and never commit a real key.",
+  "_generate": "openssl genrsa -out ca.key 2048  &&  openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 -subj '/CN=XIA Sandbox Local CA' -out ca.crt   then set caPem = contents of ca.crt, caKeyPem = contents of ca.key (newlines as \\n).",
+  "caPem": "PASTE-YOUR-CA-CERTIFICATE-PEM-HERE",
+  "caKeyPem": "PASTE-YOUR-CA-PRIVATE-KEY-PEM-HERE"
+}

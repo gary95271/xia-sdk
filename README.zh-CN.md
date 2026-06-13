@@ -19,7 +19,7 @@
 公开版、即插即用的 SDK 正在做最后打磨。**上线时间：即将公布。**
 点 Watch / Star 第一时间获知 —— 也见下方 [**保持关注**](#-保持关注)。
 
-> 👀 **预览 SDK 集成面 →** [`docs/SDK-OVERVIEW.md`](./docs/SDK-OVERVIEW.md) · 当前版本见 [`CHANGELOG`](./CHANGELOG.md)（`0.1.0-preview`）
+> 👀 **预览：** [SDK 概览](./docs/SDK-OVERVIEW.md) · [完整集成指南](./docs/SDK-INTEGRATION-GUIDE.md) · [本地 demo 运行器（`xia-serve`）](./xia-serve/README.md) · [CHANGELOG](./CHANGELOG.md)（`0.1.0-preview`）
 
 ---
 

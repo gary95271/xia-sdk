@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XIA Sandbox — Control</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 15px/1.5 system-ui, sans-serif; max-width: 720px; margin: 24px auto; padding: 0 16px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: #888; margin: 0 0 20px; }
+  .card { border: 1px solid #8884; border-radius: 10px; padding: 16px; margin: 14px 0; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .badge { font-weight: 600; padding: 2px 10px; border-radius: 999px; font-size: 13px; }
+  .on { background: #1a7f37; color: #fff; } .off { background: #8884; }
+  a.url { display: block; font-family: ui-monospace, monospace; padding: 8px 10px; margin: 6px 0;
+          background: #8881; border-radius: 8px; text-decoration: none; }
+  a.url:hover { background: #8883; }
+  button { font: inherit; padding: 7px 14px; border-radius: 8px; border: 1px solid #8886; cursor: pointer; background: #8881; }
+  button.primary { background: #1a7f37; color: #fff; border-color: #1a7f37; }
+  button.danger { background: #b62324; color: #fff; border-color: #b62324; }
+  input[type=text] { font: inherit; padding: 6px 9px; border-radius: 7px; border: 1px solid #8886; flex: 1; min-width: 180px; }
+  label.ck { display: flex; align-items: center; gap: 7px; }
+  .muted { color: #888; font-size: 13px; }
+  code { background: #8882; padding: 1px 5px; border-radius: 5px; }
+</style>
+</head>
+<body>
+  <h1>XIA Sandbox — local control</h1>
+  <p class="sub">Serving a sandbox over your LAN. Open a network URL on any device to use it.</p>
+
+  <div class="card">
+    <div class="row"><strong>Status</strong> <span id="run" class="badge on">running</span>
+      <span class="muted">port <code id="port">—</code> · dist <code id="dist">—</code></span></div>
+    <p class="muted" style="margin:10px 0 4px">Open the sandbox on any device on this network:</p>
+    <div id="urls"></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><strong>Network egress</strong> <span id="egbadge" class="badge off">off</span>
+      <button id="egtoggle" class="primary">Enable egress</button></div>
+    <p class="muted">When on, the in-browser sandbox can reach the network <em>through this machine</em>.
+       Private/loopback targets are blocked unless you allow them. Off = the sandbox has no network.</p>
+    <div class="row" style="margin-top:8px">
+      <input id="allow" type="text" placeholder="allowlist (comma-sep hosts; empty = any public host)">
+      <button id="saveallow">Save allowlist</button>
+    </div>
+    <label class="ck" style="margin-top:8px"><input type="checkbox" id="allowpriv"> allow private/loopback targets (use with care)</label>
+  </div>
+
+  <div class="card">
+    <div class="row"><strong>Server</strong>
+      <button id="stop" class="danger">Stop server</button></div>
+    <p class="muted">To change the port, stop and relaunch with <code>--port N</code>.</p>
+  </div>
+
+  <p class="muted">Control panel is host-only. Sandbox users just open a network URL above.</p>
+
+<script>
+const $ = (id) => document.getElementById(id);
+async function api(path, opts) { const r = await fetch(path, opts); return r.json(); }
+function render(s) {
+  $('port').textContent = s.port; $('dist').textContent = (s.dist || '').split(/[\\/]/).pop();
+  const eg = !!s.egress;
+  $('egbadge').textContent = eg ? 'on' : 'off'; $('egbadge').className = 'badge ' + (eg ? 'on' : 'off');
+  $('egtoggle').textContent = eg ? 'Disable egress' : 'Enable egress';
+  $('egtoggle').className = eg ? 'danger' : 'primary';
+  $('allow').value = (s.allow || []).join(', '); $('allowpriv').checked = !!s.allowPrivate;
+  const urls = $('urls'); urls.innerHTML = '';
+  const list = (s.lanUrls && s.lanUrls.length ? s.lanUrls : ['http://localhost:' + s.port + '/']);
+  for (const u of list) {
+    const a = document.createElement('a'); a.className = 'url'; a.href = u; a.target = '_blank';
+    a.textContent = u + (eg ? '   (egress on)' : ''); urls.appendChild(a);
+  }
+}
+async function refresh() { try { render(await api('/__api/status')); } catch (e) {} }
+$('egtoggle').onclick = async () => {
+  const cur = $('egbadge').textContent === 'on';
+  const allow = $('allow').value.split(',').map(s => s.trim()).filter(Boolean);
+  await api('/__api/egress', { method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ enabled: !cur, allow, allowPrivate: $('allowpriv').checked }) });
+  refresh();
+};
+$('saveallow').onclick = async () => {
+  const allow = $('allow').value.split(',').map(s => s.trim()).filter(Boolean);
+  await api('/__api/egress', { method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ allow, allowPrivate: $('allowpriv').checked }) });
+  refresh();
+};
+$('stop').onclick = async () => {
+  if (!confirm('Stop the sandbox server? LAN devices will lose access.')) return;
+  try { await api('/__api/stop', { method: 'POST' }); } catch (e) {}
+  $('run').textContent = 'stopped'; $('run').className = 'badge off';
+  document.body.style.opacity = .5;
+};
+refresh(); setInterval(refresh, 4000);
+</script>
+</body>
+</html>

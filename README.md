@@ -19,7 +19,7 @@
 We're putting the finishing touches on a public, drop-in SDK. **Launch date: coming soon.**
 Watch / star this repo to be the first to know — and see [**Stay in the loop**](#-stay-in-the-loop) below.
 
-> 👀 **Preview the SDK integration surface →** [`docs/SDK-OVERVIEW.md`](./docs/SDK-OVERVIEW.md) · current version: see [`CHANGELOG`](./CHANGELOG.md) (`0.1.0-preview`)
+> 👀 **Preview:** [SDK overview](./docs/SDK-OVERVIEW.md) · [full integration guide](./docs/SDK-INTEGRATION-GUIDE.md) · [local demo runner (`xia-serve`)](./xia-serve/README.md) · [CHANGELOG](./CHANGELOG.md) (`0.1.0-preview`)
 
 ---
 
