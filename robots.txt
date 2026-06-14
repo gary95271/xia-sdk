@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gary95271.github.io/xia-sdk/sitemap.xml
