@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ===== SEO ===== (set canonical/og:url to your final domain at launch) -->
+<title>XIA Sandbox — Run real Linux, Python, bash &amp; SQLite in the browser, no server</title>
+<meta name="description" content="XIA Sandbox runs real Linux programs — genuine CPython 3.12, bash, busybox and SQLite — entirely in the browser via native AOT x86-to-WebAssembly. 100% client-side, no server, works offline. Free for personal use.">
+<meta name="keywords" content="run Linux in browser, browser sandbox, WebAssembly Linux, run Python in browser, client-side Python, x86 to WebAssembly, x86 to wasm, in-browser terminal, WASM sandbox, run bash in browser, browser code execution, AI agent sandbox, code sandbox, CPython WebAssembly, in-browser SQLite, serverless sandbox, privacy-first compute, local-first, offline Python, Ubuntu in browser, WebAssembly emulator, client-side compute">
+<meta name="robots" content="index, follow">
+<meta name="author" content="XIA Sandbox">
+<meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://gary95271.github.io/xia-sdk/">
+
+<!-- Open Graph / social -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XIA Sandbox">
+<meta property="og:title" content="XIA Sandbox — Run real Linux, Python &amp; bash in the browser">
+<meta property="og:description" content="Real CPython, bash, busybox and SQLite running 100% client-side in the browser via native AOT x86→WebAssembly. No server. No install. Works offline.">
+<meta property="og:url" content="https://gary95271.github.io/xia-sdk/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="XIA Sandbox — Run real Linux in the browser">
+<meta name="twitter:description" content="Real CPython, bash, SQLite — 100% client-side via x86→WebAssembly. No server. Works offline.">
+
+<!-- Structured data: SoftwareApplication + FAQ (rich results) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "XIA Sandbox",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web browser (Chrome, Safari, Firefox, Edge)",
+  "description": "Run real Linux programs — genuine CPython, bash, busybox and SQLite — entirely in the browser via native ahead-of-time x86-to-WebAssembly translation. 100% client-side, no server, works offline once cached.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "Free for personal and non-commercial use; commercial license available." },
+  "featureList": ["Real CPython 3.12 in the browser", "Real bash and busybox shells", "In-browser SQLite", "Native AOT x86 to WebAssembly", "100% client-side, no backend", "Works offline once cached", "Sandbox for AI agents"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Can you run Python in the browser?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. XIA Sandbox runs genuine CPython 3.12 with the standard library entirely client-side in the browser — no server, no install." } },
+    { "@type": "Question", "name": "How do you run Linux programs in a browser?", "acceptedAnswer": { "@type": "Answer", "text": "XIA Sandbox ahead-of-time translates x86 machine code to WebAssembly, so real Linux binaries (bash, busybox, SQLite, CPython) execute natively in the browser tab on the user's own device." } },
+    { "@type": "Question", "name": "Is any data sent to a server?", "acceptedAnswer": { "@type": "Answer", "text": "No. Programs run on the user's device in WebAssembly. There is no backend in the loop, and it works offline once cached." } }
+  ]
+}
+</script>
+
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0b0e14; color: #c9d1d9; font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 48px 20px; }
+  h1 { font-size: 2.1rem; line-height: 1.2; margin: 0 0 10px; }
+  h1 .g { background: linear-gradient(90deg, #2ea043, #58a6ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { font-size: 1.15rem; color: #b9c2cc; margin: 0 0 8px; }
+  .sub { color: #8b949e; font-size: .95rem; }
+  .badges { margin: 18px 0 8px; color: #8b949e; font-size: .9rem; }
+  h2 { font-size: 1.35rem; margin: 40px 0 12px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card { border: 1px solid #222b38; border-radius: 10px; padding: 14px 16px; background: #11161f; }
+  .card b { color: #e6edf3; }
+  ul { padding-left: 20px; } li { margin: 6px 0; }
+  code { background: #1b2230; padding: 1px 6px; border-radius: 5px; font-size: .9em; }
+  a { color: #58a6ff; }
+  .cta { display: inline-block; margin-top: 18px; padding: 10px 18px; border-radius: 8px; background: #2ea043; color: #fff; text-decoration: none; font-weight: 600; }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid #222b38; color: #8b949e; font-size: .85rem; }
+  @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 1.7rem; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <h1><span class="g">Run real Linux programs in the browser</span> — no server, no install</h1>
+  <p class="lead">XIA Sandbox runs <strong>real CPython, bash, busybox and SQLite</strong> entirely inside a browser tab — on the user's own device, via native AOT <strong>x86&nbsp;→&nbsp;WebAssembly</strong> translation.</p>
+  <p class="sub">Real Python in the browser · client-side code execution · in-browser terminal · WASM Linux sandbox</p>
+  <div class="badges">🚧 Coming soon · Free for personal use · Commercial license available · Built on WebAssembly</div>
+  <a class="cta" href="https://github.com/gary95271/xia-sdk">View on GitHub →</a>
+
+  <h2>What is XIA Sandbox?</h2>
+  <p><strong>XIA Sandbox lets you run real Linux programs in the browser</strong> — genuine CPython 3.12, bash, busybox and SQLite — with <strong>nothing sent to a server</strong>. It is not a reimplementation and not a cloud VM you rent: the actual x86 binaries are ahead-of-time translated to WebAssembly and executed on-device, so results are byte-for-byte identical to real x86. Drop the SDK into any web app, or serve the demo on your LAN and open it on any phone or laptop.</p>
+
+  <h2>Features</h2>
+  <div class="grid">
+    <div class="card"><b>🐍 Real Python in the browser</b><br>Genuine CPython 3.12 + standard library, plus an optional scientific stack (NumPy, pandas, Matplotlib, Pillow).</div>
+    <div class="card"><b>🧰 Real Linux tooling</b><br>bash, busybox shells and core utilities, SQLite, and a real persistent filesystem — an Ubuntu userland in the browser.</div>
+    <div class="card"><b>⚡ Native AOT x86 → WebAssembly</b><br>Ahead-of-time translation, not an interpreter. Real performance, real binaries, byte-for-byte identical to x86.</div>
+    <div class="card"><b>🔒 Private by architecture</b><br>100% client-side code execution. Code and data never leave the device — there is no backend to send them to.</div>
+    <div class="card"><b>🤖 AI agent sandbox</b><br>Give an AI agent a safe, real place to run code — sandboxed on the user's machine, not on your servers.</div>
+    <div class="card"><b>🌐 Offline &amp; web-native</b><br>Content-addressed, cacheable, versioned assets. Loads lazily and works offline once cached.</div>
+  </div>
+
+  <h2>What you can build</h2>
+  <ul>
+    <li><strong>Run Python in the browser</strong> — notebooks and data analysis with no kernel to host.</li>
+    <li><strong>Privacy-first &amp; local-first apps</strong> — process documents, data or secrets that must never touch a server.</li>
+    <li><strong>An in-browser terminal</strong> — a real Ubuntu console with command input, client-side.</li>
+    <li><strong>Safe AI agent code execution</strong> — let agents run real code in a sandbox the user owns.</li>
+    <li><strong>Interactive docs &amp; education</strong> — runnable examples with a real interpreter, zero install.</li>
+    <li><strong>Edge &amp; offline tools</strong> — compute that keeps working when the network doesn't.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Can you run Python in the browser?</strong> Yes — genuine CPython 3.12, client-side, no server.</p>
+  <p><strong>How do you run Linux programs in a browser?</strong> By ahead-of-time translating x86 machine code to WebAssembly, so real Linux binaries execute on-device.</p>
+  <p><strong>Is any data sent to a server?</strong> No — everything runs on the user's device in WebAssembly, and it works offline once cached.</p>
+  <p><strong>Does it need installation or a plugin?</strong> No — it runs in a standard browser tab.</p>
+
+  <footer>
+    XIA Sandbox — run real Linux, Python, bash and SQLite in the browser via x86→WebAssembly.
+    Source-available / commercial: free for personal use, commercial license available.
+    © XIA Sandbox — all rights reserved. ·
+    <a href="https://github.com/gary95271/xia-sdk">GitHub</a> ·
+    <a href="https://github.com/gary95271/xia-sdk/blob/main/README.zh-CN.md">中文</a>
+  </footer>
+
+</main>
+</body>
+</html>
