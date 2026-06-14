@@ -6,6 +6,32 @@ carry a `-preview` suffix and may change without notice.
 
 中文摘要见每个版本末尾。
 
+## [engine-v0.1.0-preview] — 2026-06-14
+
+The compiled **engine binary** is now published — see
+[Releases](https://github.com/gary95271/xia-sdk/releases/tag/engine-v0.1.0-preview).
+
+### Added
+- **Engine package** `xia-sandbox-engine-0.1.0-preview.zip` — obfuscated loader + workers +
+  AOT WebAssembly + cores (busybox, CPython 3.12) + Pyodide scientific stack + content-addressed
+  manifest. Download, unzip, and serve with `xia-serve`.
+- **Finalized legal payload**, shipped with the engine and reflected in this repo: **EULA**
+  (Licensor xuanji.dev, Cayman Islands governing law, acceptance clause), **THIRD-PARTY-NOTICES**,
+  **CORRESPONDING-SOURCE** (official upstream + 3-year written offer, contact BD@xuanji.dev),
+  **PRIVACY**, and a CycloneDX **SBOM**.
+
+### Changed
+- Notices / SBOM / corresponding-source now match the **actually-shipped** components
+  (busybox, CPython, glibc, libxcrypt + Pyodide + OpenSSL) — the earlier draft over-listed
+  guests that this cut does not ship.
+- Engine shipped with identifier **mangling** (string/symbol hardening).
+
+> 中文：编译后的**引擎二进制**已发布（见 Releases）。引擎包 = 混淆 loader/workers/AOT WebAssembly +
+> busybox/CPython 核 + Pyodide 科学栈 + 内容寻址 manifest，下载解压后用 `xia-serve` 起服务。法务文件
+> （EULA：Licensor xuanji.dev、开曼管辖、含接受条款；第三方许可；对应源码 + 三年书面要约，联系
+> BD@xuanji.dev；隐私；SBOM）已定稿，并与实际发布组件（busybox/CPython/glibc/libxcrypt + Pyodide +
+> OpenSSL）对齐。
+
 ## [0.1.0-preview] — 2026-06-13
 
 Pre-launch / Coming Soon. Public landing + licensing + SDK surface preview.
@@ -18,7 +44,7 @@ Pre-launch / Coming Soon. Public landing + licensing + SDK surface preview.
 - **Full SDK integration guide** (`docs/SDK-INTEGRATION-GUIDE.md`) — the complete Worker protocol, `run` contract, init options, netProxy wire format, and hosting requirements.
 - **Local demo runner** (`xia-serve/`) — serve the sandbox over your LAN from one machine: any device opens a URL and gets the sandbox + an interactive **Ubuntu console**. Includes a host-side network egress proxy (off by default, SSRF-guarded), a control panel, and operator-side `.env` config (no secrets baked in; bring your own TLS CA).
 
-### Not yet here
-- The compiled engine SDK package (the runtime binary + workers) is **not** published in this repo yet. It ships once the launch-readiness checklist (notices/corresponding-source bundling, symbol/string hardening, SBOM, legal review) is complete.
+### Not yet here (at the time of this entry — now superseded)
+- The compiled engine package was not yet published as of this entry. It **shipped on 2026-06-14** once the launch-readiness checklist (notices/corresponding-source bundling, symbol/string hardening, SBOM, legal review) was complete — see **[engine-v0.1.0-preview]** above.
 
 > 中文：上线前预览版。包含双语落地页、引擎专有 EULA 草稿、第三方组件许可证清单草稿、SDK 集成面概览，新增**完整集成指南**与**本地 demo 运行器**（`xia-serve`：一台机器把沙箱发到局域网，任意设备打开即得沙箱 + 交互式 **Ubuntu 控制台**；自带出网代理、控制面板、`.env` 配置，密钥不内置、TLS CA 自备）。**编译后的引擎二进制尚未在本仓发布**，待合规清单完成后再发。

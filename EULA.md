@@ -1,10 +1,10 @@
-# XIA Sandbox Engine — End-User License Agreement (DRAFT)
+# XIA Sandbox Engine — End-User License Agreement
 
-> ⚠️ **DRAFT — pre-launch template, pending legal review before any distribution or sale.** Not legal advice. Bracketed fields `[…]` are placeholders to be finalized at launch.
+**Version:** 1.0 · **Licensor:** xuanji.dev · **Contact:** BD@xuanji.dev
 
-**Version:** 0.1 (pre-launch) · **Licensor:** [to be finalized] · **Contact:** [licensing contact — coming soon]
+By downloading, installing, or using the Engine, you agree to be bound by this Agreement. If you do not agree, do not download, install, or use the Engine.
 
-The bundled guest binaries (busybox, bash, …) are **not** covered by this EULA — they ship under their own (GPL / LGPL / MPL / PSF / public-domain) licenses; see [`THIRD-PARTY-NOTICES`](./THIRD-PARTY-NOTICES.md).
+The bundled guest binaries (busybox, CPython, …) are **not** covered by this EULA — they ship under their own (GPL / LGPL / MPL / PSF / public-domain) licenses; see [`THIRD-PARTY-NOTICES`](./THIRD-PARTY-NOTICES.md).
 
 ## 1. Definitions
 - **"Engine"** — the XIA Sandbox x86→WebAssembly translation/runtime engine and SDK, distributed **in compiled/binary form only**, including the loader, workers, and runtime, but **excluding** any third-party guest programs (see §7).
@@ -15,7 +15,7 @@ The bundled guest binaries (busybox, bash, …) are **not** covered by this EULA
 Subject to this Agreement, the Licensor grants you a worldwide, royalty-free, non-exclusive, non-transferable license to **use and integrate the Engine (in binary form) solely for Non-Commercial Use**.
 
 ## 3. Commercial Use — separate paid license required
-**Commercial Use requires a separate commercial license** from the Licensor. No Commercial Use rights are granted by this Agreement. Contact details for commercial licensing will be published at launch.
+**Commercial Use requires a separate commercial license** from the Licensor. Contact **BD@xuanji.dev**. No Commercial Use rights are granted by this Agreement.
 
 ## 4. Restrictions
 You may not: (a) reverse engineer, decompile, or disassemble the Engine, except to the extent this restriction is prohibited by applicable law; (b) remove or alter notices; (c) redistribute the Engine as a standalone product or SDK; (d) sublicense, sell, or rent the Engine except as permitted by a commercial license.
@@ -33,7 +33,7 @@ The Engine can execute third-party programs (e.g. shells, language runtimes, uti
 This license terminates automatically if you breach it. On termination you must cease use of the Engine.
 
 ## 9. Governing law
-[Governing law / jurisdiction — to be finalized at launch.]
+This Agreement is governed by and construed in accordance with the laws of the Cayman Islands, without regard to its conflict-of-laws rules. The courts of the Cayman Islands shall have exclusive jurisdiction over any dispute arising out of or relating to this Agreement.
 
 ---
-<sub>DRAFT template — © XIA Sandbox. To be reviewed with counsel before distribution. The personal-free / commercial-paid split and the §1 definitions are the levers for the intended free tier.</sub>
+<sub>© xuanji.dev. All rights reserved.</sub>

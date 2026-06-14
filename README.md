@@ -16,10 +16,11 @@
 
 ## 🟢 Public preview — try it now
 
-XIA Sandbox is in **public preview**. The local demo runner, the full integration
-docs, and the SDK surface are **available now** — spin up an interactive Ubuntu
-console on your LAN in minutes (see [**Quick start**](#quick-start)). The drop-in
-1.0 SDK package is on the way; ⭐ star / watch to follow the launch.
+XIA Sandbox is in **public preview**. The **engine build is available now** — download it
+from [**Releases**](https://github.com/gary95271/xia-sdk/releases/tag/engine-v0.1.0-preview),
+then spin up an interactive Ubuntu console on your LAN in minutes (see [**Quick start**](#quick-start)).
+The full integration docs and SDK surface are available too. The polished drop-in 1.0 SDK
+package is on the way; ⭐ star / watch to follow the launch.
 
 > 👀 **Start here:** [Quick start](#quick-start) · [SDK overview](./docs/SDK-OVERVIEW.md) · [full integration guide](./docs/SDK-INTEGRATION-GUIDE.md) · [local demo runner (`xia-serve`)](./xia-serve/README.md) · [CHANGELOG](./CHANGELOG.md) (`0.1.0-preview`)
 
@@ -98,7 +99,10 @@ No servers in that picture — and that's the point.
 Run the sandbox from **one** machine; open it on **any** device on the same network — phone, tablet, laptop. Each device runs the sandbox entirely in its own browser.
 
 ```sh
-# 1. get the engine build (the dist/) — see Releases (coming soon)
+# 1. download the engine build from Releases and unzip it into ./dist
+curl -L -o engine.zip \
+  https://github.com/gary95271/xia-sdk/releases/download/engine-v0.1.0-preview/xia-sandbox-engine-0.1.0-preview.zip
+mkdir -p dist && tar -xf engine.zip -C dist      # or: unzip engine.zip -d dist
 # 2. serve it on your LAN:
 node xia-serve/xia-serve.mjs --dist ./dist --port 8088
 # 3. open the printed network URL on any device — the Ubuntu console loads right there
@@ -106,7 +110,7 @@ node xia-serve/xia-serve.mjs --dist ./dist --port 8088
 
 The page that opens is an **interactive Ubuntu terminal** — type `uname -a`, `ls /`, `python3 --version`, `python3 -c 'print(2**100)'`, real `bash`. The host control panel at `/__control` turns on the sandbox's network access and stops the server. Full options, the `.env` config, and the bring-your-own TLS CA are in [`xia-serve/README.md`](./xia-serve/README.md).
 
-> No Node? The packaging flow ships a double-click `xia-serve.exe` (no install). The engine build is provided separately and is pre-launch.
+> No Node? The packaging flow ships a double-click `xia-serve.exe` (no install). The engine build is provided separately, as a [Release asset](https://github.com/gary95271/xia-sdk/releases/tag/engine-v0.1.0-preview).
 
 ### Embed it in your web app
 
@@ -135,7 +139,8 @@ Full API (Worker protocol, `run` contract, init options, network egress, hosting
 - [x] Document & data tooling
 - [x] Agent execution
 - [x] **Public SDK docs + local demo runner (`xia-serve`)** — available now
-- [ ] Drop-in 1.0 SDK package (engine binary)
+- [x] **Engine binary — preview available** in [Releases](https://github.com/gary95271/xia-sdk/releases/tag/engine-v0.1.0-preview)
+- [ ] Polished drop-in 1.0 SDK package
 - [ ] Hosted quickstart / playground
 - [ ] More languages & toolchains
 
@@ -148,7 +153,7 @@ Full API (Worker protocol, `run` contract, init options, network egress, hosting
 - ⭐ **Star** this repo to follow along
 - 🔔 Watch for the launch announcement
 - 🌐 Website: *coming soon*
-- ✉️ Contact / waitlist: *coming soon*
+- ✉️ Contact: BD@xuanji.dev
 
 ---
 
@@ -173,7 +178,7 @@ Real. The actual binaries are translated and executed — you get genuine behavi
 No. It runs in a standard browser tab.
 
 **When can I use it?**
-Now, in public preview — the local demo runner and the full docs are available (see [Quick start](#quick-start)). The drop-in 1.0 SDK package is on the way; ⭐ star/watch to follow it.
+Now, in public preview — the **engine build is downloadable** from [Releases](https://github.com/gary95271/xia-sdk/releases/tag/engine-v0.1.0-preview), and the local demo runner + full docs are available (see [Quick start](#quick-start)). The polished drop-in 1.0 SDK package is on the way; ⭐ star/watch to follow it.
 
 ---
 
