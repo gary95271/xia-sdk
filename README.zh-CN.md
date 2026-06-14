@@ -6,7 +6,7 @@
 
 ### 在浏览器里运行真正的 Linux 程序。无服务器。免安装。一个标签页搞定。
 
-**状态：🚧 即将推出** · **个人使用免费 · 提供商业授权** · **基于 WebAssembly**
+**状态：🟢 公开预览** · **个人使用免费 · 提供商业授权** · **基于 WebAssembly**
 
 <sub>真 CPython · 真 Shell · 真 SQLite · 100% 客户端运行 · 原生 AOT x86 → WebAssembly</sub>
 
@@ -14,12 +14,13 @@
 
 ---
 
-## 🚧 即将推出
+## 🟢 公开预览 —— 现在就能试
 
-公开版、即插即用的 SDK 正在做最后打磨。**上线时间：即将公布。**
-点 Watch / Star 第一时间获知 —— 也见下方 [**保持关注**](#-保持关注)。
+XIA Sandbox 已进入**公开预览**。本地 demo 运行器、完整集成文档、SDK 接口**现已可用** ——
+几分钟就能在局域网起一个交互式 Ubuntu 控制台（见 [**快速上手**](#快速上手)）。即插即用的
+1.0 SDK 包正在路上；⭐ Star / Watch 跟进发布。
 
-> 👀 **预览：** [SDK 概览](./docs/SDK-OVERVIEW.md) · [完整集成指南](./docs/SDK-INTEGRATION-GUIDE.md) · [本地 demo 运行器（`xia-serve`）](./xia-serve/README.md) · [CHANGELOG](./CHANGELOG.md)（`0.1.0-preview`）
+> 👀 **从这开始：** [快速上手](#快速上手) · [SDK 概览](./docs/SDK-OVERVIEW.md) · [完整集成指南](./docs/SDK-INTEGRATION-GUIDE.md) · [本地 demo 运行器（`xia-serve`）](./xia-serve/README.md) · [CHANGELOG](./CHANGELOG.md)（`0.1.0-preview`）
 
 ---
 
@@ -132,7 +133,8 @@ worker.postMessage({ type: 'run', id: 1, core: 'python3', argv: ['python3', '-c'
 - [x] Python + 科学计算栈
 - [x] 文档与数据工具
 - [x] Agent 执行
-- [ ] **公开 SDK 与文档 —— 🚧 即将推出**
+- [x] **公开 SDK 文档 + 本地 demo 运行器（`xia-serve`）** —— 现已可用
+- [ ] 即插即用 1.0 SDK 包（引擎二进制）
 - [ ] 托管版 quickstart / playground
 - [ ] 更多语言与工具链
 
@@ -170,10 +172,10 @@ worker.postMessage({ type: 'run', id: 1, core: 'python3', argv: ['python3', '-c'
 不需要。在标准浏览器标签页里就能跑。
 
 **什么时候能用？**
-快了 —— 这是上线前页面。Star / Watch 获取通知。
+现在，公开预览中 —— 本地 demo 运行器和完整文档已可用（见[快速上手](#快速上手)）。即插即用的 1.0 SDK 包正在路上；⭐ Star / Watch 跟进。
 
 ---
 
 <div align="center">
-<sub>© XIA Sandbox —— 保留所有权利。引擎：专有（个人免费，商用授权）。客体：各自的许可。· 本页为上线前占位页，细节可能在上线前调整。</sub>
+<sub>© XIA Sandbox —— 保留所有权利。引擎：专有（个人免费，商用授权）。客体：各自的许可。· 公开预览，细节可能在 1.0 前调整。</sub>
 </div>

@@ -6,7 +6,7 @@
 
 ### Run real Linux programs in the browser. No server. No install. Just a tab.
 
-**Status: 🚧 Coming Soon** · **Free for personal use · Commercial license available** · **Built on WebAssembly**
+**Status: 🟢 Public preview** · **Free for personal use · Commercial license available** · **Built on WebAssembly**
 
 <sub>Real CPython · Real shells · Real SQLite · 100% client-side · Native AOT x86 → WebAssembly</sub>
 
@@ -14,12 +14,14 @@
 
 ---
 
-## 🚧 Coming Soon
+## 🟢 Public preview — try it now
 
-We're putting the finishing touches on a public, drop-in SDK. **Launch date: coming soon.**
-Watch / star this repo to be the first to know — and see [**Stay in the loop**](#-stay-in-the-loop) below.
+XIA Sandbox is in **public preview**. The local demo runner, the full integration
+docs, and the SDK surface are **available now** — spin up an interactive Ubuntu
+console on your LAN in minutes (see [**Quick start**](#quick-start)). The drop-in
+1.0 SDK package is on the way; ⭐ star / watch to follow the launch.
 
-> 👀 **Preview:** [SDK overview](./docs/SDK-OVERVIEW.md) · [full integration guide](./docs/SDK-INTEGRATION-GUIDE.md) · [local demo runner (`xia-serve`)](./xia-serve/README.md) · [CHANGELOG](./CHANGELOG.md) (`0.1.0-preview`)
+> 👀 **Start here:** [Quick start](#quick-start) · [SDK overview](./docs/SDK-OVERVIEW.md) · [full integration guide](./docs/SDK-INTEGRATION-GUIDE.md) · [local demo runner (`xia-serve`)](./xia-serve/README.md) · [CHANGELOG](./CHANGELOG.md) (`0.1.0-preview`)
 
 ---
 
@@ -132,7 +134,8 @@ Full API (Worker protocol, `run` contract, init options, network egress, hosting
 - [x] Python + scientific stack
 - [x] Document & data tooling
 - [x] Agent execution
-- [ ] **Public SDK & docs — 🚧 coming soon**
+- [x] **Public SDK docs + local demo runner (`xia-serve`)** — available now
+- [ ] Drop-in 1.0 SDK package (engine binary)
 - [ ] Hosted quickstart / playground
 - [ ] More languages & toolchains
 
@@ -170,10 +173,10 @@ Real. The actual binaries are translated and executed — you get genuine behavi
 No. It runs in a standard browser tab.
 
 **When can I use it?**
-Soon — this is the pre-launch page. Star/watch to get notified.
+Now, in public preview — the local demo runner and the full docs are available (see [Quick start](#quick-start)). The drop-in 1.0 SDK package is on the way; ⭐ star/watch to follow it.
 
 ---
 
 <div align="center">
-<sub>© XIA Sandbox — all rights reserved. Engine: proprietary (free for personal use, commercial license available). Guests: their own licenses. · This page is a pre-launch placeholder; details may change before launch.</sub>
+<sub>© XIA Sandbox — all rights reserved. Engine: proprietary (free for personal use, commercial license available). Guests: their own licenses. · Public preview; details may change before 1.0.</sub>
 </div>
